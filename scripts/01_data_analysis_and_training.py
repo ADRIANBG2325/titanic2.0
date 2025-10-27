@@ -17,6 +17,7 @@ from sklearn.impute import SimpleImputer
 import joblib
 import json
 import warnings
+import os
 warnings.filterwarnings('ignore')
 
 print("=" * 80)
@@ -352,9 +353,11 @@ except Exception as e:
 print("\n💾 GUARDANDO MODELO Y METADATA...")
 
 try:
+    os.makedirs('models', exist_ok=True)
+    
     # Guardar pipeline optimizado
-    joblib.dump(grid_search.best_estimator_, 'titanic_pipeline.pkl')
-    print("✅ Pipeline guardado en 'titanic_pipeline.pkl'")
+    joblib.dump(grid_search.best_estimator_, 'models/titanic_pipeline.pkl')
+    print("✅ Pipeline guardado en 'models/titanic_pipeline.pkl'")
     
     # Crear metadata con información importante
     metadata = {
@@ -364,7 +367,8 @@ try:
         'categorical_features': categorical_features,
         'train_score': float(train_score),
         'validation_score': float(val_score),
-        'best_params': grid_search.best_params_,
+        'best_params': {k: str(v) if not isinstance(v, (int, float, str, bool, type(None))) else v 
+                       for k, v in grid_search.best_params_.items()},
         'cv_score': float(grid_search.best_score_),
         'classes': [0, 1],
         'class_names': ['No Sobrevive', 'Sobrevive'],
@@ -381,18 +385,20 @@ try:
         }
     }
     
-    with open('model_metadata.json', 'w') as f:
+    with open('models/model_metadata.json', 'w') as f:
         json.dump(metadata, f, indent=2)
-    print("✅ Metadata guardada en 'model_metadata.json'")
+    print("✅ Metadata guardada en 'models/model_metadata.json'")
     
 except Exception as e:
     print(f"❌ ERROR al guardar archivos: {str(e)}")
+    import traceback
+    traceback.print_exc()
     exit(1)
 
 print("\n" + "=" * 80)
 print("🎉 PROCESO COMPLETADO EXITOSAMENTE")
 print("=" * 80)
 print("\n📦 Archivos generados:")
-print("   - titanic_pipeline.pkl (modelo entrenado)")
-print("   - model_metadata.json (información del modelo)")
+print("   - models/titanic_pipeline.pkl (modelo entrenado)")
+print("   - models/model_metadata.json (información del modelo)")
 print("\n🚀 Siguiente paso: Ejecutar la API de Django")
