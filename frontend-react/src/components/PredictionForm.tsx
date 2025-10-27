@@ -34,7 +34,9 @@ export default function PredictionForm({ onResult }: Props) {
     null,
   )
 
-  const validateField = (name: string, value: number | null, min: number, max: number): string | undefined => {
+  // ---------- CAMBIO AQUÍ ----------
+  // Borré el parámetro 'name: string' que no se usaba.
+  const validateField = (value: number | null, min: number, max: number): string | undefined => {
     if (value === null || value === undefined) return undefined
     if (isNaN(value)) return "Debe ser un número válido"
     if (value < min || value > max) return `Debe estar entre ${min} y ${max}`
@@ -55,17 +57,19 @@ export default function PredictionForm({ onResult }: Props) {
     setFormData((prev) => ({ ...prev, [name]: processedValue }))
 
     // Validación en tiempo real
+    // ---------- CAMBIO AQUÍ ----------
+    // Borré el primer argumento 'name' de las llamadas a validateField
     if (name === "Age") {
-      const error = validateField(name, processedValue as number | null, 0, 120)
+      const error = validateField(processedValue as number | null, 0, 120)
       setErrors((prev) => ({ ...prev, age: error }))
     } else if (name === "SibSp") {
-      const error = validateField(name, processedValue as number, 0, 10)
+      const error = validateField(processedValue as number, 0, 10)
       setErrors((prev) => ({ ...prev, sibsp: error }))
     } else if (name === "Parch") {
-      const error = validateField(name, processedValue as number, 0, 10)
+      const error = validateField(processedValue as number, 0, 10)
       setErrors((prev) => ({ ...prev, parch: error }))
     } else if (name === "Fare") {
-      const error = validateField(name, processedValue as number | null, 0, 600)
+      const error = validateField(processedValue as number | null, 0, 600)
       setErrors((prev) => ({ ...prev, fare: error }))
     }
   }
@@ -73,13 +77,15 @@ export default function PredictionForm({ onResult }: Props) {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
 
+    // ---------- CAMBIO AQUÍ ----------
+    // Borré el primer argumento 'name' de las llamadas a validateField
     if (formData.Age !== null) {
-      newErrors.age = validateField("Age", formData.Age, 0, 120)
+      newErrors.age = validateField(formData.Age, 0, 120)
     }
-    newErrors.sibsp = validateField("SibSp", formData.SibSp, 0, 10)
-    newErrors.parch = validateField("Parch", formData.Parch, 0, 10)
+    newErrors.sibsp = validateField(formData.SibSp, 0, 10)
+    newErrors.parch = validateField(formData.Parch, 0, 10)
     if (formData.Fare !== null) {
-      newErrors.fare = validateField("Fare", formData.Fare, 0, 600)
+      newErrors.fare = validateField(formData.Fare, 0, 600)
     }
 
     setErrors(newErrors)
