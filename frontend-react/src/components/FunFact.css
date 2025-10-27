@@ -1,0 +1,30 @@
+.fun-fact {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.fact-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.fact-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .fun-fact {
+    flex-direction: column;
+    text-align: center;
+  }
+}

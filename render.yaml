@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: titanic-api
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements.txt && python scripts/download_dataset.py && python scripts/01_data_analysis_and_training.py"
+    startCommand: "gunicorn titanic_api.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
