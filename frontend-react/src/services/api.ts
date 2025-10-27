@@ -2,8 +2,8 @@ import axios from "axios"
 import type { PassengerData, PredictionResult, HealthResponse, ModelInfoResponse } from "../types"
 
 // --- CAMBIO AQUÍ ---
-// Se cambió 'import.meta.env.VITE_API_URL' por 'process.env.NEXT_PUBLIC_API_URL'
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"
+// Volvemos a la sintaxis de Vite
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api"
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -26,7 +26,7 @@ export const checkAPIHealth = async (): Promise<boolean> => {
 
 export const getModelInfo = async (): Promise<ModelInfoResponse | null> => {
   try {
-    const response = await api.get<ModelInfoResponse>("/predict/") // Nota: ¿Estás seguro que esto no debería ser /model-info/?
+    const response = await api.get<ModelInfoResponse>("/predict/")
     console.log("📊 Model Info:", response.data)
     return response.data
   } catch (error) {
