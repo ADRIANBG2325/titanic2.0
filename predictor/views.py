@@ -21,9 +21,9 @@ pipeline = None
 metadata = None
 
 try:
-    # Intentar cargar desde diferentes ubicaciones
     possible_paths = [
-        './predictor/titanic_pipeline.pkl',
+        os.path.join(settings.BASE_DIR, 'models', 'titanic_pipeline.pkl'),
+        './models/titanic_pipeline.pkl',
         './titanic_pipeline.pkl',
         os.path.join(settings.BASE_DIR, 'predictor', 'titanic_pipeline.pkl'),
     ]
@@ -36,10 +36,13 @@ try:
     
     if pipeline is None:
         print("❌ ERROR: No se pudo encontrar titanic_pipeline.pkl")
+        print("   Ubicaciones buscadas:")
+        for path in possible_paths:
+            print(f"   - {path}")
     
-    # Cargar metadata
     metadata_paths = [
-        './predictor/model_metadata.json',
+        os.path.join(settings.BASE_DIR, 'models', 'model_metadata.json'),
+        './models/model_metadata.json',
         './model_metadata.json',
         os.path.join(settings.BASE_DIR, 'predictor', 'model_metadata.json'),
     ]
@@ -53,6 +56,8 @@ try:
             
 except Exception as e:
     print(f"❌ ERROR al cargar el pipeline o metadata: {e}")
+    import traceback
+    traceback.print_exc()
 
 # ============================================================================
 # DATOS CURIOSOS SOBRE EL TITANIC
